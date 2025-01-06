@@ -29,7 +29,7 @@ class LogicalDeleteTest {
     @Autowired private AuthorRepository authorRepository;
 
     @ParameterizedTest
-    @ValueSource(strings = {"/right", "/wrong"})
+    @ValueSource(strings = {"/basic", "/effective"})
     void testDeleteAuthor(String endpoint) throws Exception {
 
         Author author = createAndSaveAuthor();

@@ -30,7 +30,6 @@ public class CustomStatementInspector implements StatementInspector {
         return sql;
     }
 
-
     private String getCurrentUserId() {
         // if using spring security, get the current user id from the security context
         return UUID.randomUUID().toString();

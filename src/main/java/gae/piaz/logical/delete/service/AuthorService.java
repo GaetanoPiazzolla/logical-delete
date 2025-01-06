@@ -15,12 +15,12 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
     private final CustomStatementInspector customStatementInspector;
 
-    public void deleteAuthorRight(Integer id, String reason) {
+    public void deleteAuthorEffective(Integer id, String reason) {
         customStatementInspector.setDeleteReason(reason);
         authorRepository.deleteById(id);
     }
 
-    public void deleteAuthorWrong(Integer id, String reason) {
+    public void deleteAuthorBasic(Integer id, String reason) {
         authorRepository
                 .findById(id)
                 .ifPresent(

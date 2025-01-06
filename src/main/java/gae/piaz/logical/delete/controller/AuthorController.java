@@ -14,13 +14,13 @@ public class AuthorController {
 
     private final AuthorService authorService;
 
-    @DeleteMapping("right/{id}/{reason}")
-    public void deleteAuthorRight(@PathVariable Integer id, @PathVariable String reason) {
-        authorService.deleteAuthorRight(id, reason);
+    @DeleteMapping("basic/{id}/{reason}")
+    public void deleteAuthorBasic(@PathVariable Integer id, @PathVariable String reason) {
+        authorService.deleteAuthorBasic(id, reason);
     }
 
-    @DeleteMapping("wrong/{id}/{reason}")
-    public void deleteAuthorWrong(@PathVariable Integer id, @PathVariable String reason) {
-        authorService.deleteAuthorWrong(id, reason);
+    @DeleteMapping("effective/{id}/{reason}")
+    public void deleteAuthorEffective(@PathVariable Integer id, @PathVariable String reason) {
+        authorService.deleteAuthorEffective(id, reason);
     }
 }

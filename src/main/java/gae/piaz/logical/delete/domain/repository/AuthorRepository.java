@@ -11,5 +11,4 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
     @Query(value = "SELECT * FROM authors WHERE id = ?", nativeQuery = true)
     Optional<Author> findByIdIncludingDeleted(Integer id);
-
 }
