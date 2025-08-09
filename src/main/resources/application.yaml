@@ -9,7 +9,7 @@ spring:
     properties:
       hibernate:
         session_factory:
-          statement_inspector: gae.piaz.logical.delete.config.CustomStatementInspector
+          statement_inspector: gae.piaz.logical.delete.config.CompositeInspector
         jdbc:
           time_zone: UTC
         format_sql: true

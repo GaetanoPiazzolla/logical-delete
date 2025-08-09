@@ -1,19 +1,18 @@
 package gae.piaz.logical.delete.config;
 
 import java.util.UUID;
-import org.hibernate.resource.jdbc.spi.StatementInspector;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CustomStatementInspector implements StatementInspector {
+import org.hibernate.resource.jdbc.spi.StatementInspector;
+
+public class SqlDeleteStatementInspector implements StatementInspector {
 
     private static final ThreadLocal<String> deleteReason = ThreadLocal.withInitial(() -> "none");
 
-    public void clear() {
+    public static void clear() {
         deleteReason.remove();
     }
 
-    public void setDeleteReason(String reason) {
+    public static void setDeleteReason(String reason) {
         deleteReason.set(reason);
     }
 
@@ -32,6 +31,7 @@ public class CustomStatementInspector implements StatementInspector {
 
     private String getCurrentUserId() {
         // if using spring security, get the current user id from the security context
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID()
+            .toString();
     }
 }

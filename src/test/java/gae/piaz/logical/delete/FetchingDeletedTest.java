@@ -1,9 +1,7 @@
 package gae.piaz.logical.delete;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Optional;
 
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gae.piaz.logical.delete.controller.AuthorController;
 import gae.piaz.logical.delete.domain.Author;
 import gae.piaz.logical.delete.domain.repository.AuthorRepository;
 
@@ -24,7 +25,7 @@ import gae.piaz.logical.delete.domain.repository.AuthorRepository;
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
-class LogicalDeleteTest {
+class FetchingDeletedTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,31 +33,26 @@ class LogicalDeleteTest {
     @Autowired
     private AuthorRepository authorRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @ParameterizedTest
     @ValueSource(strings = { "/basic", "/effective" })
-    void testDeleteAuthor(String endpoint) throws Exception {
+    void testFetchDeletedAuthor(String endpoint) throws Exception {
 
         Author author = createAndSaveAuthor();
-        String deleteReason = "He does not write anymore.";
+        authorRepository.delete(author);
 
-        mockMvc.perform(delete("/api/authors" + endpoint + "/" + author.getId() + "/" + deleteReason))
-            .andExpect(status().isOk());
+        String response = mockMvc.perform(get("/api/authors" + endpoint + "/deleted/" + author.getId()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-        // query filtered by @SQLRestriction
-        Optional<Author> authorOptional = authorRepository.findById(author.getId());
-        Assertions.assertTrue(authorOptional.isEmpty());
-
-        // native query, no filter
-        Optional<Author> deletedAuthOpt = authorRepository.findByIdDeleted(author.getId());
-        Assertions.assertTrue(deletedAuthOpt.isPresent());
-
-        Assertions.assertNotNull(deletedAuthOpt.get());
-        Assertions.assertNotNull(deletedAuthOpt.get()
-            .getDeletedAt());
-        Assertions.assertNotNull(deletedAuthOpt.get()
-            .getDeletedBy());
-        Assertions.assertNotNull(deletedAuthOpt.get()
-            .getDeletedReason());
+        AuthorController.AuthorDTO dto = objectMapper.readValue(response, AuthorController.AuthorDTO.class);
+        Assertions.assertNotNull(dto);
+        Assertions.assertNotNull(dto.firstName());
+        Assertions.assertNotNull(dto.lastName());
     }
 
     private Author createAndSaveAuthor() {
