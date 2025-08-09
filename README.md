@@ -11,4 +11,4 @@ https://gaetanopiazzolla.github.io/java/jpa/springboot/2025/01/06/logical-delete
 The best way of accessing logical deleted entities without writing wierd queries.
 
 Description of the code in this blog post:
-https://gaetanopiazzolla.github.io/java/jpa/springboot/2025/ ---
+https://gaetanopiazzolla.github.io/java/jpa/springboot/2025/08/09/fetch-delete.html
