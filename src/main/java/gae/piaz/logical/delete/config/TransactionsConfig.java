@@ -8,8 +8,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class TransactionsConfig {
 
     @Bean
-    public DeletedTransactionTemplate deletedTransactionTemplate(PlatformTransactionManager transactionManager) {
+    public DeletedTransactionTemplate deletedTransactionTemplate(
+            PlatformTransactionManager transactionManager) {
         return new DeletedTransactionTemplate(transactionManager);
     }
-
 }

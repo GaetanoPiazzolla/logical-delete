@@ -1,13 +1,12 @@
 package gae.piaz.logical.delete.config;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionCallback;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Aspect that intercepts methods annotated with {@link TransactionalDeleted} and executes them
@@ -34,19 +33,23 @@ public class TransactionalDeletedAspect {
      * @return the result of the method execution
      */
     @Around("@annotation(annotation)")
-    public Object executeInDeletedTransaction(ProceedingJoinPoint joinPoint, TransactionalDeleted annotation) {
+    public Object executeInDeletedTransaction(
+            ProceedingJoinPoint joinPoint, TransactionalDeleted annotation) {
 
-        log.trace("Executing method {} in deleted transaction context", joinPoint.getSignature()
-            .toShortString());
+        log.trace(
+                "Executing method {} in deleted transaction context",
+                joinPoint.getSignature().toShortString());
 
-        return deletedTransactionTemplate.execute(_ -> {
-            try {
-                return joinPoint.proceed();
-            } catch (RuntimeException e) {
-                throw e;
-            } catch (Throwable e) {
-                throw new RuntimeException("Error executing method in deleted transaction", e);
-            }
-        });
+        return deletedTransactionTemplate.execute(
+                _ -> {
+                    try {
+                        return joinPoint.proceed();
+                    } catch (RuntimeException e) {
+                        throw e;
+                    } catch (Throwable e) {
+                        throw new RuntimeException(
+                                "Error executing method in deleted transaction", e);
+                    }
+                });
     }
 }

@@ -2,19 +2,18 @@ package gae.piaz.logical.delete.config;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.resource.jdbc.spi.StatementInspector;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
- * This class is used to customize the @SQLRestriction that we have on entities, removing
- * the filters in certain conditions.
+ * This class is used to customize the @SQLRestriction that we have on entities, removing the
+ * filters in certain conditions.
  */
 @Slf4j
 public class SQLRestrictionStatementInspector implements StatementInspector {
 
-    private static final Pattern archivedPattern = Pattern.compile("(\\b\\w+\\.)?deleted_at\\s+is\\s+null", Pattern.CASE_INSENSITIVE);
+    private static final Pattern archivedPattern =
+            Pattern.compile("(\\b\\w+\\.)?deleted_at\\s+is\\s+null", Pattern.CASE_INSENSITIVE);
 
     public enum DeletedMode {
         NORMAL, // Keep default behavior - deleted_at is null
@@ -22,7 +21,8 @@ public class SQLRestrictionStatementInspector implements StatementInspector {
         ALL // Query both deleted and not deleted
     }
 
-    private static final ThreadLocal<DeletedMode> currentDeletedMode = ThreadLocal.withInitial(() -> DeletedMode.NORMAL);
+    private static final ThreadLocal<DeletedMode> currentDeletedMode =
+            ThreadLocal.withInitial(() -> DeletedMode.NORMAL);
 
     public static void setDeletedMode(DeletedMode mode) {
         log.trace("Switching DeleteMode to {}", mode);

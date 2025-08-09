@@ -1,16 +1,14 @@
 package gae.piaz.logical.delete.service;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import gae.piaz.logical.delete.config.SqlDeleteStatementInspector;
 import gae.piaz.logical.delete.config.TransactionalDeleted;
 import gae.piaz.logical.delete.domain.Author;
 import gae.piaz.logical.delete.domain.repository.AuthorRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -25,13 +23,15 @@ public class AuthorService {
     }
 
     public void deleteAuthorBasic(Integer id, String reason) {
-        authorRepository.findById(id)
-            .ifPresent(author -> {
-                author.setDeletedReason(reason);
-                author.setDeletedAt(LocalDateTime.now());
-                author.setDeletedBy("get current user");
-                authorRepository.save(author);
-            });
+        authorRepository
+                .findById(id)
+                .ifPresent(
+                        author -> {
+                            author.setDeletedReason(reason);
+                            author.setDeletedAt(LocalDateTime.now());
+                            author.setDeletedBy("get current user");
+                            authorRepository.save(author);
+                        });
     }
 
     public Author fetchDeletedAuthorBasic(Integer id) {
@@ -41,7 +41,6 @@ public class AuthorService {
 
     @TransactionalDeleted
     public Author fetchDeletedAuthorEffective(Integer id) {
-        return authorRepository.findById(id)
-            .orElseThrow();
+        return authorRepository.findById(id).orElseThrow();
     }
 }

@@ -1,7 +1,6 @@
 package gae.piaz.logical.delete.config;
 
 import java.util.UUID;
-
 import org.hibernate.resource.jdbc.spi.StatementInspector;
 
 public class SqlDeleteStatementInspector implements StatementInspector {
@@ -31,7 +30,6 @@ public class SqlDeleteStatementInspector implements StatementInspector {
 
     private String getCurrentUserId() {
         // if using spring security, get the current user id from the security context
-        return UUID.randomUUID()
-            .toString();
+        return UUID.randomUUID().toString();
     }
 }

@@ -2,7 +2,6 @@ package gae.piaz.logical.delete.config;
 
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionCallback;
@@ -57,11 +56,13 @@ public class DeletedTransactionTemplate extends TransactionTemplate {
     }
 
     private <T> T executeWithDeletedMode(Supplier<T> supplier) {
-        SQLRestrictionStatementInspector.setDeletedMode(SQLRestrictionStatementInspector.DeletedMode.DELETED);
+        SQLRestrictionStatementInspector.setDeletedMode(
+                SQLRestrictionStatementInspector.DeletedMode.DELETED);
         try {
             return supplier.get();
         } finally {
-            SQLRestrictionStatementInspector.setDeletedMode(SQLRestrictionStatementInspector.DeletedMode.NORMAL);
+            SQLRestrictionStatementInspector.setDeletedMode(
+                    SQLRestrictionStatementInspector.DeletedMode.NORMAL);
         }
     }
 }
